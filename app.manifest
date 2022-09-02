@@ -1,0 +1,51 @@
+{
+  "dependencies": null,
+  "incompatibleApps": null,
+  "info": {
+    "author": [
+      {
+        "name": "Splunk",
+        "email": null,
+        "company": null
+      }
+    ],
+    "classification": {
+      "categories": [],
+      "developmentStatus": null,
+      "intendedAudience": null
+    },
+    "commonInformationModels": null,
+    "description": "Splunk Add-on for Google Cloud Platform",
+    "id": {
+      "group": null,
+      "name": "Splunk_TA_google-cloudplatform",
+      "version": "0.434.2939784105"
+    },
+    "license": {
+      "name": null,
+      "text": "LICENSES/LicenseRef-Splunk-8-2021.txt",
+      "uri": null
+    },
+    "privacyPolicy": {
+      "name": null,
+      "text": null,
+      "uri": null
+    },
+    "releaseDate": null,
+    "releaseNotes": {
+      "name": null,
+      "text": "./README.txt",
+      "uri": null
+    },
+    "title": "Splunk Add-on for Google Cloud Platform"
+  },
+  "inputGroups": null,
+  "platformRequirements": null,
+  "schemaVersion": "2.0.0",
+  "supportedDeployments": [
+    "_standalone",
+    "_distributed"
+  ],
+  "targetWorkloads": null,
+  "tasks": null
+}

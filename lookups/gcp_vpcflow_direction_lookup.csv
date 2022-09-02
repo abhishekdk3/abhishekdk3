@@ -1,0 +1,3 @@
+vpcflow_reporter,direction
+SRC,outbound
+DEST,inbound

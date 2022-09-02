@@ -1,0 +1,862 @@
+{
+    "pages": {
+        "configuration": {
+            "tabs": [
+                {
+                    "name": "credentials",
+                    "title": "Google Credentials",
+                    "conf": "google_cloud_credentials",
+                    "restHandlerName": "google_cloud_rh_credentials",
+                    "table": {
+                        "actions": [
+                            "edit",
+                            "delete"
+                        ],
+                        "header": [
+                            {
+                                "label": "Name",
+                                "field": "name"
+                            },
+                            {
+                                "label": "Google Credentials",
+                                "field": "google_credentials",
+                                "customCell": {
+                                    "src": "CustomCell",
+                                    "type": "external"
+                                }
+                            }
+                        ]
+                    },
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 70,
+                                    "errorMsg": "Length of Name is restricted from 1 to 70."
+                                },
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[0-9|a-z|A-Z][\\w\\-]*$",
+                                    "errorMsg": "Characters of Name should start with alphanumeric and contain alphanumeric, dash or underscore only."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "google_credentials",
+                            "label": "Google Service Account Creds",
+                            "type": "custom",
+                            "help": "Provide credentials in JSON format",
+                            "required": true,
+                            "options": {
+                                "type": "external",
+                                "src": "TextAreaInput",
+                                "placeholder": "Required"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "title": "Logging",
+                    "name": "global_settings",
+                    "restHandlerName": "google_cloud_rh_settings",
+                    "entity": [
+                        {
+                            "field": "log_level",
+                            "type": "singleSelect",
+                            "label": "Logging Level",
+                            "required": true,
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "INFO",
+                                        "label": "INFO"
+                                    },
+                                    {
+                                        "value": "DEBUG",
+                                        "label": "DEBUG"
+                                    },
+                                    {
+                                        "value": "ERROR",
+                                        "label": "ERROR"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "INFO"
+                        }
+                    ]
+                },
+                {
+                    "title": "Proxy",
+                    "name": "proxy_settings",
+                    "restHandlerName": "google_cloud_rh_settings",
+                    "entity": [
+                        {
+                            "field": "proxy_enabled",
+                            "label": "Enable",
+                            "type": "checkbox"
+                        },
+                        {
+                            "field": "proxy_type",
+                            "type": "singleSelect",
+                            "label": "Proxy Type",
+                            "required": true,
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "http",
+                                        "label": "http"
+                                    },
+                                    {
+                                        "value": "socks4",
+                                        "label": "socks4"
+                                    },
+                                    {
+                                        "value": "socks5",
+                                        "label": "socks5"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "http"
+                        },
+                        {
+                            "field": "proxy_rdns",
+                            "type": "checkbox",
+                            "label": "DNS Resolution"
+                        },
+                        {
+                            "field": "proxy_url",
+                            "label": "Host",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "maxLength": 4096,
+                                    "minLength": 0,
+                                    "errorMsg": "Maximum length allowed for host is 4096"
+                                },
+                                {
+                                    "type": "regex",
+                                    "pattern": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$",
+                                    "errorMsg": "The Host field can contain letters, numbers, dots(.) and hyphens(-)"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_port",
+                            "label": "Port",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        65535
+                                    ],
+                                    "errorMsg": "Invalid port number, it should be an integer between 1 and 65535."
+                                },
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[0-9]+$",
+                                    "errorMsg": "Invalid port number, it should be an integer between 1 and 65535."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_username",
+                            "label": "Username",
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "errorMsg": "Maximum length allowed for username is 50"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_password",
+                            "label": "Password",
+                            "type": "text",
+                            "encrypted": true
+                        }
+                    ]
+                }
+            ],
+            "title": "Configuration",
+            "description": "Configure your Google credentials, settings, proxy and node information"
+        },
+        "inputs": {
+            "services": [
+                {
+                    "name": "inputs_pubsub",
+                    "title": "Cloud Pub/Sub",
+                    "restHandlerName": "google_cloud_rh_inputs_pubsub",
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[0-9|a-z|A-Z][\\w\\-]*$",
+                                    "errorMsg": "Characters of Name should start with alphanumeric and contain alphanumeric, dash or underscore only."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "google_credentials_name",
+                            "label": "Credentials",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select Google Service Account Credentials",
+                                "referenceName": "credentials"
+                            }
+                        },
+                        {
+                            "field": "google_project",
+                            "label": "Project",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select a project",
+                                "dependencies": [
+                                    "google_credentials_name"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_projects"
+                            }
+                        },
+                        {
+                            "field": "google_subscriptions",
+                            "label": "Pub/Sub Subscriptions",
+                            "type": "multipleSelect",
+                            "required": true,
+                            "options": {
+                                "createSearchChoice": true,
+                                "placeholder": "Required",
+                                "dependencies": [
+                                    "google_credentials_name",
+                                    "google_project"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_subscriptions"
+                            }
+                        },
+                        {
+                            "field": "index",
+                            "label": "Index",
+                            "type": "singleSelect",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of index name should be between 1 and 80.",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                }
+                            ],
+                            "defaultValue": "default",
+                            "options": {
+                                "endpointUrl": "data/indexes?search=isInternal=0+disabled=0",
+                                "createSearchChoice": true,
+                                "denyList": "^_.*$"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "inputs_monitoring",
+                    "title": "Cloud Monitoring",
+                    "conf": "google_cloud_monitor_inputs",
+                    "restHandlerName": "google_cloud_rh_inputs_monitoring",
+                    "hook": {
+                        "src": "Hook",
+                        "type": "external"
+                    },
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[0-9|a-z|A-Z][\\w\\-]*$",
+                                    "errorMsg": "Characters of Name should start with alphanumeric and contain alphanumeric, dash or underscore only."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "google_credentials_name",
+                            "label": "Credentials",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select Google Service Account Credentials",
+                                "referenceName": "credentials"
+                            }
+                        },
+                        {
+                            "field": "google_project",
+                            "label": "Project",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select a project",
+                                "dependencies": [
+                                    "google_credentials_name"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_projects"
+                            }
+                        },
+                        {
+                            "field": "google_metrics",
+                            "label": "Cloud Monitor Metrics",
+                            "type": "multipleSelect",
+                            "required": true,
+                            "options": {
+                                "createSearchChoice": true,
+                                "placeholder": "Required",
+                                "dependencies": [
+                                    "google_credentials_name",
+                                    "google_project"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_metrics"
+                            }
+                        },
+                        {
+                            "field": "polling_interval",
+                            "label": "Interval",
+                            "type": "text",
+                            "required": true,
+                            "defaultValue": "300",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        31536000
+                                    ]
+                                }
+                            ],
+                            "options": {
+                                "placeholder": "Collection interval for this input (in seconds)"
+                            }
+                        },
+                        {
+                            "field": "oldest",
+                            "label": "Start Date Time",
+                            "type": "text",
+                            "required": true,
+                            "help": "UTC datetime in this format: %Y-%m-%dT%H:%M:%S. For example: 2015-01-10T20:20:20",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})$",
+                                    "errorMsg": "Invalid Date Time format. Format must be %Y-%m-%dT%H:%M:%S"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "index",
+                            "label": "Index",
+                            "type": "singleSelect",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of index name should be between 1 and 80.",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                }
+                            ],
+                            "defaultValue": "default",
+                            "options": {
+                                "endpointUrl": "data/indexes?search=isInternal=0+disabled=0",
+                                "createSearchChoice": true,
+                                "denyList": "^_.*$"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "inputs_billing",
+                    "title": "Google Cloud BigQuery Billing",
+                    "conf": "google_cloud_billing_inputs",
+                    "restHandlerName": "google_cloud_rh_inputs_billing",
+                    "hook": {
+                        "src": "Hook",
+                        "type": "external"
+                    },
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[0-9|a-z|A-Z][\\w\\-]*$",
+                                    "errorMsg": "Characters of Name should start with alphanumeric and contain alphanumeric, dash or underscore only."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "google_credentials_name",
+                            "label": "Credentials",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select Google Service Account Credentials",
+                                "referenceName": "credentials"
+                            }
+                        },
+                        {
+                            "field": "google_project",
+                            "label": "Project",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select a project",
+                                "dependencies": [
+                                    "google_credentials_name"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_projects"
+                            }
+                        },
+                        {
+                            "field": "google_bq_dataset",
+                            "label": "BigQuery Dataset",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select a Bigquery Dataset",
+                                "dependencies": [
+                                    "google_credentials_name",
+                                    "google_project"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_datasets"
+                            }
+                        },
+                        {
+                            "field": "google_bq_table",
+                            "label": "BigQuery Table",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select a Bigquery table",
+                                "dependencies": [
+                                    "google_credentials_name",
+                                    "google_project",
+                                    "google_bq_dataset"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_tables"
+                            }
+                        },
+                        {
+                            "field": "ingestion_start",
+                            "label": "Start Date",
+                            "type": "text",
+                            "required": true,
+                            "help": "UTC date in this format: YYYY-mm-dd. The default is 2022-01-01, the earliest date",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^([0-9]{4}-[0-9]{2}-[0-9]{2})$",
+                                    "errorMsg": "Invalid Date format. Format must be YYYY-mm-dd"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "polling_interval",
+                            "label": "Interval",
+                            "type": "text",
+                            "required": true,
+                            "defaultValue": "86400",
+                            "help": "Default is 86400 seconds(24 hrs). It is not recommended to use a smaller interval",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        31536000
+                                    ]
+                                }
+                            ],
+                            "options": {
+                                "placeholder": "Collection interval for this input (in seconds)"
+                            }
+                        },
+                        {
+                            "field": "index",
+                            "label": "Index",
+                            "type": "singleSelect",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of index name should be between 1 and 80.",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                }
+                            ],
+                            "defaultValue": "default",
+                            "options": {
+                                "endpointUrl": "data/indexes?search=isInternal=0+disabled=0",
+                                "createSearchChoice": true,
+                                "denyList": "^_.*$"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "inputs_storage_buckets",
+                    "title": "Cloud Storage Bucket",
+                    "conf": "google_cloud_storage_buckets",
+                    "restHandlerName": "google_cloud_rh_inputs_storage_bucket",
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[0-9|a-z|A-Z][\\w\\-]*$",
+                                    "errorMsg": "Characters of Name should start with alphanumeric and contain alphanumeric, dash or underscore only."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "google_credentials_name",
+                            "label": "Credentials",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select Google Service Account Credentials",
+                                "referenceName": "credentials"
+                            }
+                        },
+                        {
+                            "field": "google_project",
+                            "label": "Project",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select a project",
+                                "dependencies": [
+                                    "google_credentials_name"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_projects"
+                            }
+                        },
+                        {
+                            "field": "bucket_name",
+                            "label": "Bucket",
+                            "type": "multipleSelect",
+                            "required": true,
+                            "options": {
+                                "createSearchChoice": true,
+                                "placeholder": "Select buckets",
+                                "dependencies": [
+                                    "google_credentials_name",
+                                    "google_project"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_buckets"
+                            }
+                        },
+                        {
+                            "field": "polling_interval",
+                            "label": "Interval",
+                            "type": "text",
+                            "required": true,
+                            "defaultValue": "3600",
+                            "help": "Default is 3600 seconds. It is not recommended to use a smaller interval",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        31536000
+                                    ]
+                                }
+                            ],
+                            "options": {
+                                "placeholder": "Collection interval for this input (in seconds)"
+                            }
+                        },
+                        {
+                            "field": "index",
+                            "label": "Index",
+                            "type": "singleSelect",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of index name should be between 1 and 80.",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                }
+                            ],
+                            "defaultValue": "default",
+                            "options": {
+                                "endpointUrl": "data/indexes?search=isInternal=0+disabled=0",
+                                "createSearchChoice": true,
+                                "denyList": "^_.*$"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "inputs_resource_metadata",
+                    "title": "Resource Metadata",
+                    "conf": "google_cloud_resource_metadata_inputs",
+                    "restHandlerName": "google_cloud_rh_inputs_resource_metadata",
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[0-9|a-z|A-Z][\\w\\-]*$",
+                                    "errorMsg": "Characters of Name should start with alphanumeric and contain alphanumeric, dash or underscore only."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "google_credentials_name",
+                            "label": "Credentials",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select Google Service Account Credentials",
+                                "referenceName": "credentials"
+                            }
+                        },
+                        {
+                            "field": "google_project",
+                            "label": "Project",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Select a project",
+                                "dependencies": [
+                                    "google_credentials_name"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_projects"
+                            }
+                        },
+                        {
+                            "field": "google_zones",
+                            "label": "Zones",
+                            "type": "multipleSelect",
+                            "required": true,
+                            "options": {
+                                "createSearchChoice": true,
+                                "placeholder": "Select zones",
+                                "dependencies": [
+                                    "google_credentials_name",
+                                    "google_project"
+                                ],
+                                "endpointUrl": "splunk_ta_google/google_zones"
+                            }
+                        },
+                        {
+                            "field": "google_apis",
+                            "label": "APIs",
+                            "type": "custom",
+                            "required": true,
+                            "options": {
+                                "src": "APIsInput",
+                                "type": "external"
+                            }
+                        },
+                        {
+                            "field": "index",
+                            "label": "Index",
+                            "type": "singleSelect",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of index name should be between 1 and 80.",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                }
+                            ],
+                            "defaultValue": "default",
+                            "options": {
+                                "endpointUrl": "data/indexes?search=isInternal=0+disabled=0",
+                                "createSearchChoice": true,
+                                "denyList": "^_.*$"
+                            }
+                        },
+                        {
+                            "field": "sourcetype",
+                            "label": "Sourcetype",
+                            "type": "text",
+                            "required": true,
+                            "defaultValue": "google:gcp:resource:metadata",
+                            "options": {
+                                "placeholder": "Provide a sourcetype for this input"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "title": "Inputs",
+            "description": "Manage your data inputs",
+            "table": {
+                "actions": [
+                    "edit",
+                    "enable",
+                    "delete",
+                    "clone"
+                ],
+                "header": [
+                    {
+                        "field": "name",
+                        "label": "Name"
+                    },
+                    {
+                        "field": "input",
+                        "label": "Input type",
+                        "customCell": {
+                            "src": "CustomCell",
+                            "type": "external"
+                        }
+                    },
+                    {
+                        "field": "google_credentials_name",
+                        "label": "Google Credentials"
+                    },
+                    {
+                        "field": "google_project",
+                        "label": "Project"
+                    },
+                    {
+                        "label": "Index",
+                        "field": "index"
+                    },
+                    {
+                        "label": "Status",
+                        "field": "disabled"
+                    }
+                ],
+                "moreInfo": [
+                    {
+                        "field": "name",
+                        "label": "Name"
+                    },
+                    {
+                        "field": "google_subscriptions",
+                        "label": "Pub/Sub Subscription"
+                    },
+                    {
+                        "field": "google_zones",
+                        "label": "Zones"
+                    },
+                    {
+                        "field": "bucket_name",
+                        "label": "Bucket"
+                    },
+                    {
+                        "field": "dataset_name",
+                        "label": "Dataset"
+                    },
+                    {
+                        "field": "table_name",
+                        "label": "Table"
+                    },
+                    {
+                        "field": "google_metrics",
+                        "label": "Cloud Monitor Metrics"
+                    },
+                    {
+                        "field": "google_apis",
+                        "label": "Google APIs"
+                    },
+                    {
+                        "field": "report_prefix",
+                        "label": "Report Prefix"
+                    },
+                    {
+                        "field": "oldest",
+                        "label": "Start Date Time"
+                    },
+                    {
+                        "field": "ingestion_start",
+                        "label": "Start Date"
+                    },
+                    {
+                        "field": "polling_interval",
+                        "label": "Interval"
+                    },
+                    {
+                        "field": "sourcetype",
+                        "label": "Sourcetype"
+                    },
+                    {
+                        "field": "disabled",
+                        "label": "Status",
+                        "mapping": {
+                            "true": "Disabled",
+                            "false": "Enabled",
+                            "0": "Enabled",
+                            "1": "Disabled"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "meta": {
+        "name": "Splunk_TA_google-cloudplatform",
+        "restRoot": "google",
+        "version": "0.434.2939784105",
+        "displayName": "Splunk Add-on for Google Cloud Platform",
+        "schemaVersion": "0.0.3"
+    }
+}

@@ -1,0 +1,8 @@
+resource_type,object_category
+iam_role,role
+iam_user,user
+gcs_bucket,storage
+gce_disk,disk
+gce_instance,instance
+service_account,service account
+gce_firewall_rule,firewall
